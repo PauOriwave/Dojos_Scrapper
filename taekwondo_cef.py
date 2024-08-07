@@ -8,12 +8,12 @@ taekwondo_cef_data = {}
 
 def configure_driver():
     chromium_options = Options()
-    chromium_options.binary_location = "/usr/bin/chromium-browser"
-    # chromium_options.add_argument("--headless")  # Si deseas ejecutar en modo headless
+    chromium_options.binary_location = r"c:\Users\paw_f\Desktop\chromium.exe"
+    chromium_options.add_argument("--headless")  # Modo headless (opcional)
     chromium_options.add_argument("--ignore-certificate-errors")
     chromium_options.add_argument("--ignore-ssl-errors")
     chromium_options.add_argument("--window-size=1920,1080")
-    driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=chromium_options)
+    driver = webdriver.Chrome(service=Service(r"c:\Users\paw_f\Desktop\chromium.exe"), options=chromium_options)
     return driver
 
 def busqueda_horarios():
@@ -40,6 +40,9 @@ def busqueda_horarios():
             if span_texts:
                 taekwondo_cef_data['ul_spans'] = span_texts
 
+    except Exception as e:
+        print(f"Error: {e}")
+
     finally:
         # Cerrar el navegador
         driver.quit()
@@ -49,3 +52,4 @@ def busqueda_horarios():
 
 # Llamar a la función
 busqueda_horarios()
+
