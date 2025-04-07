@@ -8,12 +8,17 @@ taekwondo_cef_data = {}
 
 def configure_driver():
     chromium_options = Options()
-    chromium_options.binary_location = r"c:\Users\paw_f\Desktop\chromium.exe"
-    chromium_options.add_argument("--headless")  # Modo headless (opcional)
+    chromium_options.binary_location = r"c:\Users\paw_f\Desktop\chromium.exe"  # Navegador
+    chromium_options.add_argument("--headless")  # Opcional: sin ventana
     chromium_options.add_argument("--ignore-certificate-errors")
     chromium_options.add_argument("--ignore-ssl-errors")
     chromium_options.add_argument("--window-size=1920,1080")
-    driver = webdriver.Chrome(service=Service(r"c:\Users\paw_f\Desktop\chromium.exe"), options=chromium_options)
+
+    # AQUÍ usas chromedriver, NO chromium
+    driver = webdriver.Chrome(
+        service=Service(r"c:\Users\paw_f\Desktop\chromedriver.exe"),
+        options=chromium_options
+    )
     return driver
 
 def busqueda_horarios():
@@ -34,11 +39,17 @@ def busqueda_horarios():
         # Extraer todos los elementos ul que contienen span
         ul_elements = driver.find_elements(By.CSS_SELECTOR, "ul")  # Encuentra todos los ul
 
+        all_span_texts = []  # Lista para almacenar todos los textos de los spans
+
         for ul in ul_elements:
             spans = ul.find_elements(By.TAG_NAME, "span")  # Encuentra todos los span dentro de cada ul
             span_texts = [span.text for span in spans]  # Extrae el texto de cada span
             if span_texts:
-                taekwondo_cef_data['ul_spans'] = span_texts
+                all_span_texts.append(span_texts)  # Añade la lista de textos a la lista general
+
+        # Asignar todos los textos de spans al diccionario
+        if all_span_texts:
+            taekwondo_cef_data['ul_spans'] = all_span_texts
 
     except Exception as e:
         print(f"Error: {e}")
@@ -52,4 +63,3 @@ def busqueda_horarios():
 
 # Llamar a la función
 busqueda_horarios()
-
